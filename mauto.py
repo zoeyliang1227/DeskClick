@@ -163,12 +163,6 @@ class WinKeyController:
             presses = random.randint(1, 10)
             print(f"隨機選擇: {direction}鍵，按 {presses} 次")
             
-            # for i in range(presses):                    
-            #     result1 = self.send_key(direction)
-            #     time.sleep(random.uniform(0.7, 1.3))
-            #     result2 = self.send_key('c')
-            #     print(f"  {i+1}. {direction} 和 c -> {'✓' if result1 and result2 else '✗'}")
-            #     time.sleep(random.uniform(0.7, 1.3))
             for i in range(presses):  
                 success = self.send_combo_keys(direction, 'c', hold_time=random.uniform(0.2, 0.4))
                 print(f"  {i+1}. {direction} + c -> {'✓' if success else '✗'}")
