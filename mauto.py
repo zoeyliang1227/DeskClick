@@ -92,99 +92,170 @@ class WinKeyController:
     
     def hold_space_loop(self):
         """持續按空白鍵"""
-        while self.running:
-            self.send_key('space', random.uniform(0.1, 0.3))
-            time.sleep(random.uniform(0.1, 0.3))
+        space_count = 0
+        try:
+            while self.running:
+                space_count += 1
+                self.send_key('space', random.uniform(0.1, 0.3))
+                
+                # 每100次顯示一次狀態
+                if space_count % 100 == 0:
+                    print(f"🔄 空白鍵已執行 {space_count} 次，狀態: {'運行中' if self.running else '已停止'}")
+                
+                time.sleep(random.uniform(0.1, 0.3))
+        except Exception as e:
+            print(f"❌ hold_space_loop 出錯: {e}")
+            import traceback
+            traceback.print_exc()
+        finally:
+            print(f"🔚 hold_space_loop 線程結束 (總共執行 {space_count} 次)")
     
     def periodic_keys_loop(self):
         """定期按鍵序列"""
-        time.sleep(2)  # 等待空白鍵先開始
-        
-        # 初始按鍵
-        print("按初始 1 鍵")
-        success = self.send_key('1')
-        print(f"初始1鍵結果: {success}")
-        
-        
-        while self.running:
-            wait_time = random.randint(10, 60)
-            print(f"等待 {wait_time} 秒...")
-            time.sleep(wait_time)
+        try:
+            time.sleep(2)  # 等待空白鍵先開始
             
-            if not self.running:
-                break
+            # 初始按鍵
+            print("按初始 1 鍵")
+            success = self.send_key('1')
+            print(f"初始1鍵結果: {success}")
             
-            print("開始按鍵序列...")
-            
-            # 暫停空白鍵線程
-            print("🔄 暫停空白鍵，執行按鍵序列")
-            temp_running = self.running
-            self.running = False  # 暫停空白鍵
-            time.sleep(1)  # 等待空白鍵停止
-            
-            try:
-                # 隨機選擇左鍵或右鍵
-                direction = random.choice(['left', 'right'])
-                presses = random.randint(1, 10)
-                print(f"隨機選擇: {direction}鍵，按 {presses} 次")
+            cycle_count = 0
+            while self.running:
+                cycle_count += 1
+                wait_time = random.randint(10, 60)
+                print(f"[週期 {cycle_count}] 等待 {wait_time} 秒...")
                 
-                for i in range(presses):
-                    result1 = self.send_key(direction)
+                # 分段等待，這樣可以及時響應停止信號
+                for i in range(wait_time):
+                    if not self.running:
+                        print("⏹️ 收到停止信號，退出等待")
+                        return
+                    time.sleep(1)
+                    
+                    # 每10秒顯示一次進度
+                    if (i + 1) % 10 == 0:
+                        remaining = wait_time - i - 1
+                        print(f"   還有 {remaining} 秒...")
+                
+                if not self.running:
+                    break
+                
+                print(f"[週期 {cycle_count}] 開始按鍵序列...")
+                
+                try:
+                    # 隨機選擇左鍵或右鍵
+                    direction = random.choice(['left', 'right'])
+                    presses = random.randint(1, 10)
+                    print(f"隨機選擇: {direction}鍵，按 {presses} 次")
+                    
+                    for i in range(presses):
+                        if not self.running:
+                            print("⏹️ 收到停止信號，中斷按鍵序列")
+                            return
+                            
+                        result1 = self.send_key(direction)
+                        time.sleep(0.2)
+                        result2 = self.send_key('c')
+                        print(f"  {i+1}. {direction} 和 c -> {'✓' if result1 and result2 else '✗'}")
+                        time.sleep(random.uniform(0.3, 0.7))
+                    
+                    # 隨機決定是否按 Z
                     time.sleep(random.uniform(0.3, 0.7))
-                    result2 = self.send_key('c')
-                    print(f"{direction} 和 C -> {'✓' if result1 and result2 else '✗'}")
-                    time.sleep(random.uniform(0.7, 1.3))
-                
-                # 隨機決定是否按 Z
-                time.sleep(random.uniform(0.3, 0.7))
-                if random.choice([True, False]):
-                    result3 = self.send_key('z')
-                    print(f"z -> {'✓' if result3 else '✗'}")
+                    if random.choice([True, False]):
+                        result3 = self.send_key('z')
+                        print(f"  z -> {'✓' if result3 else '✗'}")
+                        ttime.sleep(random.uniform(0.3, 0.7))
+                    else:
+                        print("  跳過 z 鍵")
+                    
+                    # 按數字 1
+                    result4 = self.send_key('1')
+                    print(f"  1 -> {'✓' if result4 else '✗'}")
                     time.sleep(random.uniform(0.3, 0.7))
-                else:
-                    print("跳過 z 鍵")
-                
-                # 按數字 1
-                result4 = self.send_key('1')
-                print(f"1 -> {'✓' if result4 else '✗'}")
-                time.sleep(random.uniform(0.3, 0.7))
-                
-                print("✅ 本輪按鍵完成\n" + "-"*30)
-                
-            finally:
-                # 恢復空白鍵線程
-                self.running = temp_running
-                if self.running:
-                    print("🔄 恢復空白鍵")
-                    重新啟動空白鍵線程
-                    space_thread = threading.Thread(target=self.hold_space_loop, daemon=True)
-                    space_thread.start()
+                    
+                    print(f"✅ [週期 {cycle_count}] 按鍵序列完成\n" + "-"*40)
+                    
+                except Exception as e:
+                    print(f"❌ [週期 {cycle_count}] 按鍵序列出錯: {e}")
+                    import traceback
+                    traceback.print_exc()
+                    continue  # 繼續下一輪，不要停止
+                    
+        except Exception as e:
+            print(f"❌ periodic_keys_loop 出現嚴重錯誤: {e}")
+            import traceback
+            traceback.print_exc()
+        finally:
+            print("🔚 periodic_keys_loop 線程結束")
     
     def start(self):
         """開始執行"""
         self.running = True
         
-        print("使用 Windows API 直接發送按鍵")
+        print("🚀 使用 Windows API 直接發送按鍵")
         print("開始執行，請切換到 Artale 視窗...")
-        time.sleep(5)
+        
+        for i in range(5, 0, -1):
+            print(f"倒數 {i} 秒...")
+            time.sleep(1)
+        
+        print("✅ 開始執行！")
         
         # 啟動兩個線程
-        space_thread = threading.Thread(target=self.hold_space_loop, daemon=True)
-        periodic_thread = threading.Thread(target=self.periodic_keys_loop, daemon=True)
-        
-        space_thread.start()
-        periodic_thread.start()
-        
-        print("腳本已啟動！按 Ctrl+C 停止")
-        
         try:
+            space_thread = threading.Thread(target=self.hold_space_loop, daemon=True, name="SpaceThread")
+            periodic_thread = threading.Thread(target=self.periodic_keys_loop, daemon=True, name="PeriodicThread")
+            
+            print("🔄 啟動空白鍵線程...")
+            space_thread.start()
+            
+            print("🔄 啟動定期按鍵線程...")
+            periodic_thread.start()
+            
+            print("✨ 腳本已啟動！按 Ctrl+C 停止")
+            print("="*50)
+            
+            # 主線程監控
+            start_time = time.time()
             while self.running:
-                time.sleep(1)
+                time.sleep(10)  # 每10秒檢查一次
+                
+                elapsed = time.time() - start_time
+                hours = int(elapsed // 3600)
+                minutes = int((elapsed % 3600) // 60)
+                seconds = int(elapsed % 60)
+                
+                # 檢查線程狀態
+                space_alive = space_thread.is_alive()
+                periodic_alive = periodic_thread.is_alive()
+                
+                print(f"📊 運行時間: {hours:02d}:{minutes:02d}:{seconds:02d} | "
+                      f"空白鍵線程: {'✅' if space_alive else '❌'} | "
+                      f"定期按鍵線程: {'✅' if periodic_alive else '❌'}")
+                
+                # 如果有線程死亡，重新啟動
+                if not space_alive and self.running:
+                    print("⚠️  空白鍵線程已死亡，重新啟動...")
+                    space_thread = threading.Thread(target=self.hold_space_loop, daemon=True, name="SpaceThread")
+                    space_thread.start()
+                
+                if not periodic_alive and self.running:
+                    print("⚠️  定期按鍵線程已死亡，重新啟動...")
+                    periodic_thread = threading.Thread(target=self.periodic_keys_loop, daemon=True, name="PeriodicThread")
+                    periodic_thread.start()
+                    
         except KeyboardInterrupt:
-            print("\n正在停止...")
+            print("\n⏹️  收到中斷信號 (Ctrl+C)")
+        except Exception as e:
+            print(f"❌ 主程式出錯: {e}")
+            import traceback
+            traceback.print_exc()
+        finally:
+            print("🔄 正在停止所有線程...")
             self.running = False
-            time.sleep(1)
-            print("已停止")
+            time.sleep(2)  # 給線程時間結束
+            print("✅ 程式已完全停止")
 
 if __name__ == '__main__':
     controller = WinKeyController()
