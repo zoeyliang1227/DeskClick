@@ -97,14 +97,15 @@ class WinKeyController:
             time.sleep(random.uniform(0.1, 0.3))
     
     def periodic_keys_loop(self):
-        """定期按鍵序列"""        
+        """定期按鍵序列"""
+        time.sleep(2)  # 等待空白鍵先開始
+        
         # 初始按鍵
         print("按初始 1 鍵")
         success = self.send_key('1')
         print(f"初始1鍵結果: {success}")
         
-        time.sleep(2)  # 等待空白鍵先開始
-
+        
         while self.running:
             wait_time = random.randint(10, 60)
             print(f"等待 {wait_time} 秒...")
@@ -119,7 +120,7 @@ class WinKeyController:
             print("🔄 暫停空白鍵，執行按鍵序列")
             temp_running = self.running
             self.running = False  # 暫停空白鍵
-            time.sleep(0.5)  # 等待空白鍵停止
+            time.sleep(1)  # 等待空白鍵停止
             
             try:
                 # 隨機選擇左鍵或右鍵
