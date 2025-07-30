@@ -23,7 +23,8 @@ class WinKeyController:
         self.user32 = ctypes.windll.user32
         self.kernel32 = ctypes.windll.kernel32
         self.running = False
-        
+        self.space_running = False
+
     def send_key(self, key, hold_time=0.05):
         """使用Windows API發送按鍵"""
         if key in VK_CODES:
@@ -108,18 +109,16 @@ class WinKeyController:
             
             # 分段等待，這樣可以及時響應停止信號
             for i in range(wait_time):
-                if not self.running:
-                    print("⏹️ 收到停止信號，退出等待")
-                    return
                 time.sleep(1)
                 
                 # 每10秒顯示一次進度
                 if (i + 1) % 10 == 0:
                     remaining = wait_time - i - 1
                     print(f"   還有 {remaining} 秒...")
-            
-            if not self.running:
-                break
+
+            print("⏹️ 暫停空白鍵線程...")
+            self.space_running = False
+            print("✅ 空白鍵線程已停止")
             
             print(f"[週期 {cycle_count}] 開始按鍵序列...")
             
@@ -155,8 +154,11 @@ class WinKeyController:
             
             print(f"✅ [週期 {cycle_count}] 按鍵序列完成\n" + "-"*40)
 
+            self.space_running = True
+
     def start(self):
         """開始執行"""
+        self.space_running = True
         self.running = True
         
         print("🚀 使用 Windows API 直接發送按鍵")
@@ -173,11 +175,11 @@ class WinKeyController:
         print("按初始 1 鍵")
         success = self.send_key('1')
         print(f"初始1鍵結果: {success}")
-        space_thread = threading.Thread(target=self.hold_space_loop, daemon=True, name="SpaceThread")
+        self.space_thread = threading.Thread(target=self.hold_space_loop, daemon=True)
         periodic_thread = threading.Thread(target=self.periodic_keys_loop, daemon=True, name="PeriodicThread")
         
         print("🔄 啟動空白鍵線程...")
-        space_thread.start()
+        self.space_thread.start()
         
         print("🔄 啟動定期按鍵線程...")
         periodic_thread.start()
