@@ -13,7 +13,7 @@ def hold_space():
 
 def periodic_keys():
     while True:
-        time.sleep(300)  # 每 5 分鐘
+        time.sleep(180)  # 每 3 分鐘
         for _ in range(random.randint(1, 5)):
             pyautogui.press('left')
             time.sleep(0.2)
@@ -24,8 +24,12 @@ def periodic_keys():
 
 if __name__ == '__main__':
     print("開始執行，請切到目標視窗...")
-    time.sleep(5)  # 給你切換視窗的時間
+    time.sleep(5)
 
-    # 用 thread 分開執行持續按空白 和 定時按其他鍵
+    # 兩個功能都放到 thread 中執行
     threading.Thread(target=hold_space, daemon=True).start()
-    periodic_keys()  # 主線程執行定時動作
+    threading.Thread(target=periodic_keys, daemon=True).start()
+
+    # 主線程 idle，避免程式跑完自動結束
+    while True:
+        time.sleep(1)
