@@ -97,14 +97,14 @@ class WinKeyController:
             time.sleep(random.uniform(0.1, 0.3))
     
     def periodic_keys_loop(self):
-        """定期按鍵序列"""
-        time.sleep(2)  # 等待空白鍵先開始
-        
+        """定期按鍵序列"""        
         # 初始按鍵
         print("按初始 1 鍵")
         success = self.send_key('1')
         print(f"初始1鍵結果: {success}")
         
+        time.sleep(2)  # 等待空白鍵先開始
+
         while self.running:
             wait_time = random.randint(10, 60)
             print(f"等待 {wait_time} 秒...")
