@@ -7,55 +7,85 @@ from threading import Lock
 # for img import detect_arrow_sequence
 
 def combined_keys():
-    """將兩個功能合併到一個線程中執行"""
-    print("使用合併模式執行...")
+    """調試版的合併按鍵功能"""
+    print("=== 開始合併按鍵功能 (調試版) ===")
     
-    # 初始按鍵
-    pyautogui.press('1')
-    print('初始 1')
+    # 初始按鍵 - 加強版
+    print("準備按初始 '1' 鍵...")
+    try:
+        pyautogui.press('1')
+        print("✓ 成功執行初始 '1' 鍵")
+    except Exception as e:
+        print(f"✗ 初始 '1' 鍵失敗: {e}")
+    
+    time.sleep(2)  # 給更多時間觀察
     
     last_periodic_time = time.time()
-    next_periodic_interval = random.randint(10, 60)
+    next_periodic_interval = 15  # 縮短到15秒方便測試
+    space_counter = 0
+    
+    print(f"進入主循環，下次定期按鍵將在 {next_periodic_interval} 秒後...")
     
     while True:
         current_time = time.time()
         
         # 檢查是否該執行定期按鍵
         if current_time - last_periodic_time >= next_periodic_interval:
-            print("\n開始定期按鍵序列...")
+            print("\n🔔 時間到！開始定期按鍵序列...")
             
-            # 執行定期按鍵序列
-            direction = random.choice(['left', 'right'])
-            presses = random.randint(1, 10)
-            print(f"隨機選擇: {direction}鍵，按 {presses} 次")
-            
-            for _ in range(presses):
-                pyautogui.press(direction)
-                print(direction)
-                time.sleep(0.05)
-                pyautogui.press('c')
-                print('c')
-                time.sleep(random.uniform(0.1, 0.3))
-            
-            # Z鍵
-            if random.choice([True, False]):
-                pyautogui.press('z')
-                print('z')
-                time.sleep(random.uniform(0.1, 0.3))
-            
-            # 數字1
-            pyautogui.press('1')
-            print('1')
+            try:
+                # 執行定期按鍵序列
+                direction = random.choice(['left', 'right'])
+                presses = random.randint(2, 5)  # 減少次數方便觀察
+                print(f"📋 計劃: {direction}鍵 {presses} 次")
+                
+                for i in range(presses):
+                    print(f"  第 {i+1} 次:")
+                    print(f"    按 {direction}...")
+                    pyautogui.press(direction)
+                    time.sleep(0.1)
+                    
+                    print(f"    按 c...")
+                    pyautogui.press('c')
+                    time.sleep(0.2)
+                
+                # Z鍵
+                if random.choice([True, False]):
+                    print("  按 z...")
+                    pyautogui.press('z')
+                    time.sleep(0.2)
+                else:
+                    print("  跳過 z")
+                
+                # 數字1
+                print("  按 1...")
+                pyautogui.press('1')
+                
+                print("✓ 定期按鍵序列完成!")
+                
+            except Exception as e:
+                print(f"✗ 定期按鍵序列出錯: {e}")
             
             # 更新時間
             last_periodic_time = current_time
-            next_periodic_interval = random.randint(10, 60)
-            print(f"定期按鍵完成，下次將在 {next_periodic_interval} 秒後執行\n" + "-"*30)
+            next_periodic_interval = random.randint(15, 30)  # 縮短間隔
+            print(f"⏰ 下次定期按鍵將在 {next_periodic_interval} 秒後\n" + "-"*50)
         
         # 執行空白鍵
-        pyautogui.keyDown('space')
-        time.sleep(random.uniform(0.1, 0.3))
-        pyautogui.keyUp('space')
+        try:
+            pyautogui.keyDown('space')
+            time.sleep(random.uniform(0.1, 0.2))
+            pyautogui.keyUp('space')
+            space_counter += 1
+            
+            # 每執行50次空白鍵報告一次
+            if space_counter % 50 == 0:
+                remaining_time = next_periodic_interval - (current_time - last_periodic_time)
+                print(f"🔄 空白鍵執行 {space_counter} 次，距下次定期按鍵還有 {remaining_time:.1f} 秒")
+                
+        except Exception as e:
+            print(f"✗ 空白鍵出錯: {e}")
+        
         time.sleep(random.uniform(0.1, 0.3))
 
 if __name__ == '__main__':
@@ -63,7 +93,7 @@ if __name__ == '__main__':
     time.sleep(5)
     
     threading.Thread(target=combined_keys, daemon=True).start()
-    
+
     # 主線程保持運行
     while True:
         time.sleep(1)
