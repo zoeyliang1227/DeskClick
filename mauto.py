@@ -90,7 +90,29 @@ class WinKeyController:
                 print(f"按鍵發送失敗 {key}: {e}")
                 return False
         return False
-    
+    def send_combo_keys(self, key1, key2, hold_time=0.1):
+        """模擬同時按下兩個鍵（例如方向鍵 + c）"""
+        if key1 not in VK_CODES or key2 not in VK_CODES:
+            return False
+
+        vk1 = VK_CODES[key1]
+        vk2 = VK_CODES[key2]
+
+        try:
+            # 按下 key1 和 key2
+            self.user32.keybd_event(vk1, 0, 0, 0)
+            self.user32.keybd_event(vk2, 0, 0, 0)
+            time.sleep(hold_time)
+
+            # 放開 key2 和 key1（反向順序）
+            self.user32.keybd_event(vk2, 0, 2, 0)
+            self.user32.keybd_event(vk1, 0, 2, 0)
+
+            return True
+        except Exception as e:
+            print(f"組合鍵發送失敗: {e}")
+            return False
+
     def hold_space_loop(self):
         while self.space_running:
             self.send_key('space', random.uniform(0.1, 0.3))
@@ -110,7 +132,7 @@ class WinKeyController:
             if self.space_thread.is_alive():
                 self.space_thread.join()
             print("🔴 空白鍵線程已停止")
-    
+
     def periodic_keys_loop(self):
         """定期按鍵序列"""
         time.sleep(2)  # 等待空白鍵先開始
@@ -141,13 +163,17 @@ class WinKeyController:
             presses = random.randint(1, 10)
             print(f"隨機選擇: {direction}鍵，按 {presses} 次")
             
-            for i in range(presses):                    
-                result1 = self.send_key(direction)
+            # for i in range(presses):                    
+            #     result1 = self.send_key(direction)
+            #     time.sleep(random.uniform(0.7, 1.3))
+            #     result2 = self.send_key('c')
+            #     print(f"  {i+1}. {direction} 和 c -> {'✓' if result1 and result2 else '✗'}")
+            #     time.sleep(random.uniform(0.7, 1.3))
+            for i in range(presses):  
+                success = self.send_combo_keys(direction, 'c', hold_time=random.uniform(0.2, 0.4))
+                print(f"  {i+1}. {direction} + c -> {'✓' if success else '✗'}")
                 time.sleep(random.uniform(0.7, 1.3))
-                result2 = self.send_key('c')
-                print(f"  {i+1}. {direction} 和 c -> {'✓' if result1 and result2 else '✗'}")
-                time.sleep(random.uniform(0.7, 1.3))
-            
+                    
             # 隨機決定是否按 Z
             time.sleep(random.uniform(0.7, 1.3))
             if random.choice([True, False]):
