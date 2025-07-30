@@ -174,7 +174,7 @@ class WinKeyController:
         # space_thread = threading.Thread(target=self.hold_space_loop, daemon=True)
         periodic_thread = threading.Thread(target=self.periodic_keys_loop, daemon=True)
         
-        space_thread.start()
+        # space_thread.start()
         periodic_thread.start()
         
         print("腳本已啟動！按 Ctrl+C 停止")
