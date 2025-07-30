@@ -13,24 +13,29 @@ def hold_space():
 
 def periodic_keys():
     while True:
-        time.sleep(random.randint(18, 30))    # 3～5分鐘
+        time.sleep(random.randint(180, 300))    # 3～5分鐘
         for _ in range(random.randint(1, 10)):
             pyautogui.press('left')
+            print('left')
             time.sleep(random.uniform(0.1, 0.5))
         for _ in range(random.randint(1, 10)):
             pyautogui.press('right')
+            print('right')
             time.sleep(random.uniform(0.1, 0.5))
         
         # 隨機按下 C 和/或 Z
         if random.choice([True, False]):
             pyautogui.press('c')
+            print('c')
             time.sleep(random.uniform(0.1, 0.3))
         if random.choice([True, False]):
             pyautogui.press('z')
+            print('z')
             time.sleep(random.uniform(0.1, 0.3))
 
         # 按一下數字 1（Q 上面那個）
         pyautogui.press('1')
+        print('1')
         time.sleep(random.uniform(0.1, 0.3))
 
 if __name__ == '__main__':
