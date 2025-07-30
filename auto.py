@@ -14,9 +14,9 @@ def hold_space():
         time.sleep(random.uniform(0.1, 0.5))  # 按住與釋放之間加點間隔
 
 def periodic_keys():
+    time.sleep(random.uniform(0.3, 0.5))
     pyautogui.press('1')
     print('1')
-    time.sleep(random.uniform(0.1, 0.3))
 
     while True:
         wait_time = random.randint(60, 180)
@@ -46,7 +46,7 @@ def periodic_keys():
         # 按一下數字 1
         pyautogui.press('1')
         print('1')
-        time.sleep(random.uniform(0.1, 0.3))
+        time.sleep(random.uniform(0.3, 0.5))
         
         print("本輪按鍵完成\n" + "-"*30)
 
