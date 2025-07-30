@@ -19,7 +19,7 @@ def periodic_keys():
     print('1')
 
     while True:
-        wait_time = random.randint(60, 180)
+        wait_time = random.randint(10, 60)
         print(f"等待 {wait_time} 秒...")
         time.sleep(wait_time)
 
