@@ -7,20 +7,31 @@ import threading
 def hold_space():
     while True:
         pyautogui.keyDown('space')
-        time.sleep(0.1)
+        time.sleep(random.uniform(0.1, 0.5))
         pyautogui.keyUp('space')
-        time.sleep(0.1)  # 按住與釋放之間加點間隔
+        time.sleep(random.uniform(0.1, 0.5))  # 按住與釋放之間加點間隔
 
 def periodic_keys():
     while True:
-        time.sleep(180)  # 每 3 分鐘
-        for _ in range(random.randint(1, 5)):
+        time.sleep(random.randint(18, 30))    # 3～5分鐘
+        for _ in range(random.randint(1, 10)):
             pyautogui.press('left')
-            time.sleep(0.2)
-        for _ in range(random.randint(1, 5)):
+            time.sleep(random.uniform(0.1, 0.5))
+        for _ in range(random.randint(1, 10)):
             pyautogui.press('right')
-            time.sleep(0.2)
-        pyautogui.press('1')  # 主鍵盤的數字 1
+            time.sleep(random.uniform(0.1, 0.5))
+        
+        # 隨機按下 C 和/或 Z
+        if random.choice([True, False]):
+            pyautogui.press('c')
+            time.sleep(random.uniform(0.1, 0.3))
+        if random.choice([True, False]):
+            pyautogui.press('z')
+            time.sleep(random.uniform(0.1, 0.3))
+
+        # 按一下數字 1（Q 上面那個）
+        pyautogui.press('1')
+        time.sleep(random.uniform(0.1, 0.3))
 
 if __name__ == '__main__':
     print("開始執行，請切到目標視窗...")
