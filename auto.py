@@ -3,6 +3,8 @@ import time
 import random
 import threading
 
+# for img import detect_arrow_sequence
+
 
 def hold_space():
     while True:
@@ -12,31 +14,41 @@ def hold_space():
         time.sleep(random.uniform(0.1, 0.5))  # 按住與釋放之間加點間隔
 
 def periodic_keys():
+    pyautogui.press('1')
+    print('1')
+    time.sleep(random.uniform(0.1, 0.3))
+
     while True:
-        time.sleep(random.randint(180, 300))    # 3～5分鐘
-        for _ in range(random.randint(1, 10)):
-            pyautogui.press('left')
-            print('left')
-            time.sleep(random.uniform(0.1, 0.5))
-        for _ in range(random.randint(1, 10)):
-            pyautogui.press('right')
-            print('right')
-            time.sleep(random.uniform(0.1, 0.5))
+        wait_time = random.randint(60, 180)
+        print(f"等待 {wait_time} 秒...")
+        time.sleep(wait_time)
+
+        print("開始按鍵序列...")
+        # 隨機選擇左鍵或右鍵，按1～10次
+        direction = random.choice(['left', 'right'])
+        presses = random.randint(1, 10)
+        print(f"隨機選擇: {direction}鍵，按 {presses} 次")
         
-        # 隨機按下 C 和/或 Z
-        if random.choice([True, False]):
+        for _ in range(presses):
+            pyautogui.press(direction)
+            print(direction)
             pyautogui.press('c')
             print('c')
-            time.sleep(random.uniform(0.1, 0.3))
+            time.sleep(random.uniform(0.1, 0.5))
+        
+        # 隨機決定是否按下 Z
+        time.sleep(random.uniform(0.1, 0.3))
         if random.choice([True, False]):
             pyautogui.press('z')
             print('z')
             time.sleep(random.uniform(0.1, 0.3))
-
-        # 按一下數字 1（Q 上面那個）
+        
+        # 按一下數字 1
         pyautogui.press('1')
         print('1')
         time.sleep(random.uniform(0.1, 0.3))
+        
+        print("本輪按鍵完成\n" + "-"*30)
 
 if __name__ == '__main__':
     print("開始執行，請切到目標視窗...")

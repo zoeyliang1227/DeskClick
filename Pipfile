@@ -5,8 +5,10 @@ name = "pypi"
 
 [packages]
 threaded = "*"
-pyautogui = "*"
 pyinstaller = "*"
+pyautogui = "*"
+opencv-python = "*"
+pillow = "*"
 
 [dev-packages]
 
