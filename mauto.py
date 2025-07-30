@@ -115,11 +115,11 @@ class WinKeyController:
             
             print("開始按鍵序列...")
             
-            # # 暫停空白鍵線程
-            # print("🔄 暫停空白鍵，執行按鍵序列")
-            # temp_running = self.running
-            # self.running = False  # 暫停空白鍵
-            # time.sleep(0.5)  # 等待空白鍵停止
+            # 暫停空白鍵線程
+            print("🔄 暫停空白鍵，執行按鍵序列")
+            temp_running = self.running
+            self.running = False  # 暫停空白鍵
+            time.sleep(0.5)  # 等待空白鍵停止
             
             try:
                 # 隨機選擇左鍵或右鍵
@@ -129,38 +129,35 @@ class WinKeyController:
                 
                 for i in range(presses):
                     result1 = self.send_key(direction)
-                    print(f"{direction} -> {'✓' if result1 else '✗'}")
-                    time.sleep(0.2)
-                    
-                    result2 = self.send_key('c')
-                    print(f"c -> {'✓' if result2 else '✗'}")
                     time.sleep(random.uniform(0.3, 0.7))
+                    result2 = self.send_key('c')
+                    print(f"{direction} 和 C -> {'✓' if result1 and result2 else '✗'}")
+                    time.sleep(random.uniform(0.7, 1.3))
                 
                 # 隨機決定是否按 Z
-                time.sleep(0.5)
+                time.sleep(random.uniform(0.3, 0.7))
                 if random.choice([True, False]):
                     result3 = self.send_key('z')
                     print(f"z -> {'✓' if result3 else '✗'}")
-                    time.sleep(0.5)
+                    time.sleep(random.uniform(0.3, 0.7))
                 else:
                     print("跳過 z 鍵")
                 
                 # 按數字 1
                 result4 = self.send_key('1')
                 print(f"1 -> {'✓' if result4 else '✗'}")
-                time.sleep(0.5)
+                time.sleep(random.uniform(0.3, 0.7))
                 
                 print("✅ 本輪按鍵完成\n" + "-"*30)
                 
             finally:
-                print('aaa')
-                # # 恢復空白鍵線程
-                # self.running = temp_running
-                # if self.running:
-                #     print("🔄 恢復空白鍵")
-                    # 重新啟動空白鍵線程
-                    # space_thread = threading.Thread(target=self.hold_space_loop, daemon=True)
-                    # space_thread.start()
+                # 恢復空白鍵線程
+                self.running = temp_running
+                if self.running:
+                    print("🔄 恢復空白鍵")
+                    重新啟動空白鍵線程
+                    space_thread = threading.Thread(target=self.hold_space_loop, daemon=True)
+                    space_thread.start()
     
     def start(self):
         """開始執行"""
@@ -171,10 +168,10 @@ class WinKeyController:
         time.sleep(5)
         
         # 啟動兩個線程
-        # space_thread = threading.Thread(target=self.hold_space_loop, daemon=True)
+        space_thread = threading.Thread(target=self.hold_space_loop, daemon=True)
         periodic_thread = threading.Thread(target=self.periodic_keys_loop, daemon=True)
         
-        # space_thread.start()
+        space_thread.start()
         periodic_thread.start()
         
         print("腳本已啟動！按 Ctrl+C 停止")
