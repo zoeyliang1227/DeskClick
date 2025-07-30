@@ -92,10 +92,24 @@ class WinKeyController:
         return False
     
     def hold_space_loop(self):
-        """持續按空白鍵"""
-        while self.running:
+        while self.space_running:
             self.send_key('space', random.uniform(0.1, 0.3))
             time.sleep(random.uniform(0.1, 0.3))
+
+    def start_space_thread(self):
+        if not self.space_running:
+            self.space_running = True
+            self.space_thread = threading.Thread(target=self.hold_space_loop, daemon=True)
+            self.space_thread.start()
+            print("🟢 空白鍵線程已啟動")
+
+    def stop_space_thread(self):
+        if self.space_running:
+            print("⏹️ 正在停止空白鍵線程...")
+            self.space_running = False
+            if self.space_thread.is_alive():
+                self.space_thread.join()
+            print("🔴 空白鍵線程已停止")
     
     def periodic_keys_loop(self):
         """定期按鍵序列"""
@@ -117,8 +131,7 @@ class WinKeyController:
                     print(f"   還有 {remaining} 秒...")
 
             print("⏹️ 暫停空白鍵線程...")
-            self.space_running = False
-            print("✅ 空白鍵線程已停止")
+            self.stop_space_thread()
             time.sleep(2)
             
             print(f"[週期 {cycle_count}] 開始按鍵序列...")
@@ -152,7 +165,7 @@ class WinKeyController:
             
             print(f"✅ [週期 {cycle_count}] 按鍵序列完成\n" + "-"*40)
 
-            self.space_running = True
+            self.start_space_thread()
 
     def start(self):
         """開始執行"""
