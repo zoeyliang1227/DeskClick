@@ -119,6 +119,7 @@ class WinKeyController:
             print("⏹️ 暫停空白鍵線程...")
             self.space_running = False
             print("✅ 空白鍵線程已停止")
+            time.sleep(2)
             
             print(f"[週期 {cycle_count}] 開始按鍵序列...")
             
@@ -127,30 +128,27 @@ class WinKeyController:
             presses = random.randint(1, 10)
             print(f"隨機選擇: {direction}鍵，按 {presses} 次")
             
-            for i in range(presses):
-                if not self.running:
-                    print("⏹️ 收到停止信號，中斷按鍵序列")
-                    return
-                    
+            for i in range(presses):                    
                 result1 = self.send_key(direction)
-                time.sleep(0.2)
+                time.sleep(random.uniform(0.7, 1.3))
                 result2 = self.send_key('c')
                 print(f"  {i+1}. {direction} 和 c -> {'✓' if result1 and result2 else '✗'}")
-                time.sleep(random.uniform(0.3, 0.7))
+                time.sleep(random.uniform(0.7, 1.3))
             
             # 隨機決定是否按 Z
-            time.sleep(random.uniform(0.3, 0.7))
+            time.sleep(random.uniform(0.7, 1.3))
             if random.choice([True, False]):
                 result3 = self.send_key('z')
                 print(f"  z -> {'✓' if result3 else '✗'}")
-                time.sleep(random.uniform(0.3, 0.7))
+                time.sleep(random.uniform(0.7, 1.3))
             else:
                 print("  跳過 z 鍵")
             
+            time.sleep(random.uniform(0.7, 1.3))
             # 按數字 1
             result4 = self.send_key('1')
             print(f"  1 -> {'✓' if result4 else '✗'}")
-            time.sleep(random.uniform(0.3, 0.7))
+            time.sleep(random.uniform(0.7, 1.3))
             
             print(f"✅ [週期 {cycle_count}] 按鍵序列完成\n" + "-"*40)
 
