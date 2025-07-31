@@ -1,7 +1,7 @@
 ># Windows
 
 ## Description
-Use **PyAutoGUI** to automate the mouse and keyboard
+Use **ctypes** and **threading** to automate the mouse and keyboard
 
 ## Install
 
