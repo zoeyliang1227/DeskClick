@@ -1,22 +1,9 @@
 import ctypes
-import ctypes.wintypes
 import time
 import random
 import threading
 
-# Windows API 常數
-WM_KEYDOWN = 0x0100
-WM_KEYUP = 0x0101
-
-# 虛擬鍵碼
-VK_CODES = {
-    'space': 0x20,
-    'left': 0x25,
-    'right': 0x27,
-    'c': 0x43,
-    'z': 0x5A,
-    '1': 0x31,
-}
+from key_codes import VK_CODES
 
 class WinKeyController:
     def __init__(self):
@@ -90,6 +77,7 @@ class WinKeyController:
                 print(f"按鍵發送失敗 {key}: {e}")
                 return False
         return False
+        
     def send_combo_keys(self, key1, key2, hold_time=0.1):
         """模擬同時按下兩個鍵（例如方向鍵 + c）"""
         if key1 not in VK_CODES or key2 not in VK_CODES:
