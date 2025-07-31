@@ -77,7 +77,7 @@ class WinKeyController:
                 print(f"按鍵發送失敗 {key}: {e}")
                 return False
         return False
-        
+
     def send_combo_keys(self, key1, key2, hold_time=0.1):
         """模擬同時按下兩個鍵（例如方向鍵 + c）"""
         if key1 not in VK_CODES or key2 not in VK_CODES:
@@ -148,7 +148,7 @@ class WinKeyController:
             
             # 隨機選擇左鍵或右鍵
             direction = random.choice(['left', 'right'])
-            presses = random.randint(1, 10)
+            presses = random.randint(1, 5)
             print(f"隨機選擇: {direction}鍵，按 {presses} 次")
             
             for i in range(presses):  
