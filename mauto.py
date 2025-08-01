@@ -128,7 +128,7 @@ class WinKeyController:
         cycle_count = 0
         while self.running:
             cycle_count += 1
-            wait_time = random.randint(10, 60)
+            wait_time = random.randint(10, 30)
             print(f"[週期 {cycle_count}] 等待 {wait_time} 秒...")
             
             # 分段等待，這樣可以及時響應停止信號
