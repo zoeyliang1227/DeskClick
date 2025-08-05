@@ -75,24 +75,24 @@ def press_arrow_sequence(seq):
         pyautogui.press(direction)
         time.sleep(1)
 
-# 主迴圈
-while True:
-    location = find_template(teleport_template)
-    if location:
-        print("📍 偵測到傳送裝置")
-        pyautogui.press('up')  # 啟動傳送裝置
-        time.sleep(1)
-
-        if wait_for_arrow_ui():
-            seq = detect_arrow_sequence()
-            if seq:
-                press_arrow_sequence(seq)
-                print("✅ 完成一組傳送指令")
+    # 主迴圈
+    while True:
+        location = find_template(teleport_template)
+        if location:
+            print("📍 偵測到傳送裝置")
+            pyautogui.press('up')  # 啟動傳送裝置
+            time.sleep(1)
+    
+            if wait_for_arrow_ui():
+                seq = detect_arrow_sequence()
+                if seq:
+                    press_arrow_sequence(seq)
+                    print("✅ 完成一組傳送指令")
+                else:
+                    print("⚠️ 沒辨識到箭頭序列")
             else:
-                print("⚠️ 沒辨識到箭頭序列")
+                print("⚠️ 箭頭 UI 沒出現")
+    
+            time.sleep(5)  # 傳送完等一下再開始下一輪
         else:
-            print("⚠️ 箭頭 UI 沒出現")
-
-        time.sleep(5)  # 傳送完等一下再開始下一輪
-    else:
-        time.sleep(1)
+            time.sleep(1)

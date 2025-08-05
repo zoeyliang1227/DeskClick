@@ -9,6 +9,7 @@ pyinstaller = "*"
 pyautogui = "*"
 opencv-python = "*"
 pillow = "*"
+keyboard = "*"
 
 [dev-packages]
 
