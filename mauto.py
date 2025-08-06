@@ -69,7 +69,7 @@ class WinKeyController():
         control_thread.start()
         
         print("✨ 所有系統已啟動！")
-        print("💡 提示：按 F2 可隨時暫停腳本，處理完事情後再按 F4 恢復")
+        print(f"💡 提示：按 {start} 可隨時暫停腳本，處理完事情後再按 {pause} 恢復")
         print("="*60)
         
         # 主線程監控

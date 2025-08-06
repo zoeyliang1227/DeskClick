@@ -4,11 +4,9 @@ import threading
 
 from button import send_key
 
-time_wait = random.uniform(0.1, 0.3)
-
-
 def hold_space_loop(self):
     while self.space_running:
+        time_wait = random.uniform(0.1, 0.3)
         if self.paused:
             stop_space_thread(self)
             time.sleep(time_wait)
