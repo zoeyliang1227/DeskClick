@@ -3,7 +3,6 @@ import keyboard
 
 from key_codes import VK_CODES
 from presses_spacebar import stop_space_thread
-# from monsters_attacks import stop_periodic_thread
 
 time_wait = 0.3
 start = 'F4'
@@ -199,3 +198,10 @@ def stop(self):
     
     # 給一點時間讓線程清理
     time.sleep(1)
+
+def pause_state(self):
+    if self.paused:
+        time.sleep(time_wait)
+    else:
+        print("🔑 檢測到 F4 鍵...")
+        print('🔄 啟動定期按鍵線程...')
