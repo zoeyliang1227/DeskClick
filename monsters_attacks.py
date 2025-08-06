@@ -8,7 +8,7 @@ from presses_spacebar import pause_state, start_space_thread, stop_space_thread
 
 
 time_wait = random.uniform(0.7, 1.3)
-wait_time = random.randint(2, 5)
+wait_time = random.randint(10, 30)
 
 def periodic_keys_loop(self, run_times):
     """定期按鍵序列"""
