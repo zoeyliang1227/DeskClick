@@ -28,6 +28,13 @@ def stop_space_thread(self):
     if self.space_running:
         print("⏹️ 正在停止空白鍵線程...")
         self.space_running = False
-        if self.space_thread.is_alive():
+        if self.space_thread.is_alive() and threading.current_thread() != self.space_thread:
             self.space_thread.join()
         print("🔴 空白鍵線程已停止")
+
+def pause_state(self):
+    if self.paused:
+        time.sleep(time_wait)
+    else:
+        print("🔑 檢測到 F4 鍵...")
+        print('🔄 啟動定期按鍵線程...')

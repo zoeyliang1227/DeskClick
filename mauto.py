@@ -13,6 +13,9 @@ from listener import keyboard_listener_with_fallback, stop
 # from climbs_rope import try_climb_rope
 # from Rune import press_arrow_sequence
 
+start = 'F4'
+pause = 'F2'
+
 
 class WinKeyController():
     def __init__(self):
@@ -83,7 +86,7 @@ class WinKeyController():
         control_thread.start()
         
         print("✨ 所有系統已啟動！")
-        print("💡 提示：按 F2 可隨時暫停腳本，處理完事情後再按 F2 恢復")
+        print("💡 提示：按 F2 可隨時暫停腳本，處理完事情後再按 F4 恢復")
         print("="*60)
         
         # 主線程監控
@@ -100,7 +103,7 @@ class WinKeyController():
                 # 顯示狀態
                 if self.paused:
                     status = f"⏸️  暫停中 | 運行時間: {hours:02d}:{minutes:02d}:{seconds:02d}"
-                    print(f"📊 {status} | 按 F2 恢復")
+                    print(f"📊 {status} | 按 {start} 恢復")
 
                 else:
                     status = f"運行時間: {hours:02d}:{minutes:02d}:{seconds:02d}"
@@ -116,7 +119,7 @@ class WinKeyController():
 
 if __name__ == '__main__':
     print("🎮 Artale 自動腳本")
-    print("⚠️  注意：如果 F2 鍵無法使用，程式會自動切換到控制台輸入模式")
+    print(f"⚠️  注意：如果 {pause} 鍵無法使用，程式會自動切換到控制台輸入模式")
     
     controller = WinKeyController()
     run_times = int(input("✨ 輸入 隨機選擇左鍵或右鍵 要執行幾次...\n"))
