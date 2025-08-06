@@ -10,8 +10,6 @@ from monsters_attacks import periodic_keys_loop
 from presses_spacebar import hold_space_loop
 from button import send_key
 from listener import keyboard_listener_with_fallback, stop
-# from climbs_rope import try_climb_rope
-# from Rune import press_arrow_sequence
 
 start = 'F4'
 pause = 'F2'
@@ -26,29 +24,14 @@ class WinKeyController():
         if send_key(self, key):
             return True
 
-    # def send_combo_keys(self, key1, key2):
-    #     send_combo_keys(self, key1, key2)
-
     def hold_space_loop(self):
         hold_space_loop(self)
-
-    # def start_space_thread(self):
-    #     start_space_thread(self)
-
-    # def stop_space_thread(self):
-    #     stop_space_thread(self)
 
     def periodic_keys_loop(self, run_times):
         periodic_keys_loop(self, run_times)
 
-    # def toggle_pause(self):
-    #     toggle_pause(self)
-
     def keyboard_listener_with_fallback(self):
         keyboard_listener_with_fallback(self)
-
-    # def simple_key_listener(self):
-    #     simple_key_listener(self)
 
     def stop(self):
         stop(self)

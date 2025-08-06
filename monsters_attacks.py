@@ -4,8 +4,7 @@ import threading
 
 from button import send_key, send_combo_keys
 from listener import pause_state
-from presses_spacebar import pause_state, start_space_thread, stop_space_thread
-
+from presses_spacebar import start_space_thread, stop_space_thread
 
 
 time_wait = random.uniform(0.7, 1.3)
