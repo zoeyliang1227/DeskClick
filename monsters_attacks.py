@@ -31,7 +31,7 @@ def periodic_keys_loop(self, run_times):
         print(f"[週期 {cycle_count}] 開始按鍵序列...")
         # 隨機選擇左鍵或右鍵
         direction = random.choice(['left', 'right'])
-        presses = random.randint(1, run_times+1)
+        presses = random.randint(1, run_times)
         print(f"隨機選擇: {direction}鍵，按 {presses} 次")
         for i in range(presses): 
             success = send_combo_keys(self, direction, 'c')
