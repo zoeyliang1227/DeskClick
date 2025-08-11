@@ -27,8 +27,8 @@ class WinKeyController():
     def hold_space_loop(self):
         hold_space_loop(self)
 
-    def periodic_keys_loop(self, run_times):
-        periodic_keys_loop(self, run_times)
+    def periodic_keys_loop(self, buff_key, run_times, space_1, space_2):
+        periodic_keys_loop(self, buff_key, run_times, space_1, space_2)
 
     def keyboard_listener_with_fallback(self):
         keyboard_listener_with_fallback(self)
@@ -36,7 +36,7 @@ class WinKeyController():
     def stop(self):
         stop(self)
 
-    def start(self, run_times):
+    def start(self, buff_key, run_times):
         """開始執行"""
         self.space_running = True
         self.running = True
@@ -52,11 +52,16 @@ class WinKeyController():
         
         # 啟動兩個線程
         # 初始按鍵
-        print("按初始 1 鍵")
-        success = self.send_key('1')
-        print(f"初始1鍵結果: {success}")
+        print(f"按初始 {buff_key} 個 buff")
+        for k in range(1, buff_key+1):
+            print(k)
+            success = self.send_key(str(k))
+            time.sleep(random.uniform(0.7, 1.3))
+        
+        print(f"初始 {buff_key} 個 buff 結果: {success}")
         self.space_thread = threading.Thread(target=self.hold_space_loop, daemon=True)
-        periodic_thread = threading.Thread(target=lambda: self.periodic_keys_loop(run_times), daemon=True, name="PeriodicThread")
+        print(space_1, space_2)
+        periodic_thread = threading.Thread(target=lambda: self.periodic_keys_loop(buff_key, run_times, space_1, space_2), daemon=True, name="PeriodicThread")
         
         print("🔄 啟動空白鍵線程...")
         self.space_thread.start()
@@ -105,5 +110,8 @@ if __name__ == '__main__':
     print(f"⚠️  注意：如果 {pause} 鍵無法使用，程式會自動切換到控制台輸入模式")
     
     controller = WinKeyController()
+    buff_key = int(input("✨ 輸入 幾個 buff (三個則填3)...\n"))
     run_times = int(input("✨ 輸入 隨機選擇左鍵或右鍵 要執行幾次...\n"))
-    controller.start(run_times)
+    space_1 = int(input("✨ 輸入 空白鍵開始時間...\n"))
+    space_2 = int(input("✨ 輸入 空白鍵結束時間...\n"))
+    controller.start(buff_key, run_times)

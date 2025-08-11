@@ -7,12 +7,12 @@ from listener import pause_state
 from presses_spacebar import start_space_thread, stop_space_thread
 
 
-def periodic_keys_loop(self, run_times):
+def periodic_keys_loop(self, buff_key, run_times, space_1, space_2):
     """定期按鍵序列"""    
     cycle_count = 0
     while self.running:
         time_wait = random.uniform(0.7, 1.3)
-        wait_time = random.randint(10, 30)
+        wait_time = random.randint(space_1, space_2)
         while self.paused:
             pause_state(self)
 
@@ -46,9 +46,13 @@ def periodic_keys_loop(self, run_times):
         else:
             print("  跳過 z 鍵")
         time.sleep(time_wait)
-        # 按數字 1
-        result4 = send_key(self, '1')
-        print(f"  1 -> {'✓' if result4 else '✗'}")
+        
+        # buff
+        for k in range(1, buff_key+1):
+            result4 = send_key(self, str(k))
+            print(f"  {buff_key} -> {'✓' if result4 else '✗'}")
+            time.sleep(time_wait)
+            
         time.sleep(time_wait)
         print(f"✅ [週期 {cycle_count}] 按鍵序列完成\n" + "-"*40)
         start_space_thread(self)

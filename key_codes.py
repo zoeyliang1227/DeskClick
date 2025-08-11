@@ -10,6 +10,8 @@ VK_CODES = {
     'c': 0x43,
     'z': 0x5A,
     '1': 0x31,
+    '2': 0x32,
+    '3': 0x33,
     'mouse_middle': 0x04,  # 滑鼠中鍵（不常用）
     'mouse_right': 0x02,   # 滑鼠右鍵
     'numpad_0': 0x60,      # 小鍵盤的 0
