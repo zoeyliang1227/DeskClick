@@ -1,8 +1,10 @@
+import os
 import cv2
 import numpy as np
 import pyautogui
 import time
-from PIL import ImageGrab
+
+from PIL import Image  # 或者是你用的影像處理函式庫
 
 # 圖片模板
 teleport_template = cv2.imread('Teleport.png', 0)

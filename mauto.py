@@ -1,4 +1,6 @@
 import time
+import yaml
+import ctypes
 import random
 import threading
 import pyautogui
@@ -16,8 +18,17 @@ pause = 'F2'
 
 
 class WinKeyController():
-    def __init__(self):
-        __init__(self)
+    def __init__(self, config_path='config.yml'):
+        self.config = self.load_config(config_path)
+        self.user32 = ctypes.windll.user32
+        self.kernel32 = ctypes.windll.kernel32
+        self.running = False
+        self.paused = False
+        self.space_running = False
+
+    def load_config(self, path):
+        with open(path, 'r', encoding='utf-8') as f:
+            return yaml.safe_load(f)
 
     def send_key(self, key):
         send_key(self, key)
@@ -27,8 +38,11 @@ class WinKeyController():
     def hold_space_loop(self):
         hold_space_loop(self)
 
-    def periodic_keys_loop(self, buff_key, run_times, space_1, space_2):
-        periodic_keys_loop(self, buff_key, run_times, space_1, space_2)
+    def auto_mosters(self):
+        auto_mosters(self)
+
+    def periodic_keys_loop(self, buff_key, run_times, space_1, space_2, buff_time):
+        periodic_keys_loop(self, buff_key, run_times, space_1, space_2, buff_time)
 
     def keyboard_listener_with_fallback(self):
         keyboard_listener_with_fallback(self)
@@ -36,10 +50,19 @@ class WinKeyController():
     def stop(self):
         stop(self)
 
-    def start(self, buff_key, run_times):
+    def start(self):
         """開始執行"""
         self.space_running = True
         self.running = True
+
+        buff_key = int(self.config.get('buff_key'))
+        run_times = int(self.config.get('run_times'))
+        space_1 = int(self.config.get('space_1'))
+        space_2 = int(self.config.get('space_2'))
+        buff_time = int(self.config.get('buff_time'))
+
+        print(f"📌 按鍵: {buff_key} / 次數: {run_times} / 延遲: {space_1}-{space_2}秒 / buff時間: {buff_time} 秒")
+        print("="*50)
         
         print("🚀 使用 Windows API 直接發送按鍵")
         print("開始執行，請切換到 Artale 視窗...")
@@ -54,14 +77,12 @@ class WinKeyController():
         # 初始按鍵
         print(f"按初始 {buff_key} 個 buff")
         for k in range(1, buff_key+1):
-            print(k)
             success = self.send_key(str(k))
             time.sleep(random.uniform(0.7, 1.3))
         
         print(f"初始 {buff_key} 個 buff 結果: {success}")
         self.space_thread = threading.Thread(target=self.hold_space_loop, daemon=True)
-        print(space_1, space_2)
-        periodic_thread = threading.Thread(target=lambda: self.periodic_keys_loop(buff_key, run_times, space_1, space_2), daemon=True, name="PeriodicThread")
+        periodic_thread = threading.Thread(target=lambda: self.periodic_keys_loop(buff_key, run_times, space_1, space_2, buff_time), daemon=True, name="PeriodicThread")
         
         print("🔄 啟動空白鍵線程...")
         self.space_thread.start()
@@ -108,10 +129,10 @@ class WinKeyController():
 if __name__ == '__main__':
     print("🎮 Artale 自動腳本")
     print(f"⚠️  注意：如果 {pause} 鍵無法使用，程式會自動切換到控制台輸入模式")
-    
+
     controller = WinKeyController()
-    buff_key = int(input("✨ 輸入 幾個 buff (三個則填3)...\n"))
-    run_times = int(input("✨ 輸入 隨機選擇左鍵或右鍵 要執行幾次...\n"))
-    space_1 = int(input("✨ 輸入 空白鍵開始時間...\n"))
-    space_2 = int(input("✨ 輸入 空白鍵結束時間...\n"))
-    controller.start(buff_key, run_times)
+    # buff_key = int(input("✨ 輸入 幾個 buff (三個則填3)...\n"))
+    # run_times = int(input("✨ 輸入 隨機選擇左鍵或右鍵 要執行幾次...\n"))
+    # space_1 = int(input("✨ 輸入 空白鍵開始時間...\n"))
+    # space_2 = int(input("✨ 輸入 空白鍵結束時間...\n"))
+    controller.start()
