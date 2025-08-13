@@ -7,6 +7,8 @@ VK_CODES = {
     'space': 0x20,         # 空白鍵
     'left': 0x25,          # ←
     'right': 0x27,         # →
+    'up': 0x26,            # ↑
+    'down': 0x28,          # ↓
     'c': 0x43,
     'z': 0x5A,
     '1': 0x31,

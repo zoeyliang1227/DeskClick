@@ -1,6 +1,5 @@
 import ctypes
 import time
-import numpy as np
 
 from key_codes import VK_CODES
 

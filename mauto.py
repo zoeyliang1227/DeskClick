@@ -3,11 +3,7 @@ import yaml
 import ctypes
 import random
 import threading
-import pyautogui
-import cv2
-import numpy as np
 
-from __init__ import __init__
 from monsters_attacks import periodic_keys_loop
 from presses_spacebar import hold_space_loop
 from button import send_key
@@ -50,7 +46,7 @@ class WinKeyController():
     def stop(self):
         stop(self)
 
-    def start(self):
+    def start(self, set_config):
         """開始執行"""
         self.space_running = True
         self.running = True
@@ -131,8 +127,4 @@ if __name__ == '__main__':
     print(f"⚠️  注意：如果 {pause} 鍵無法使用，程式會自動切換到控制台輸入模式")
 
     controller = WinKeyController()
-    # buff_key = int(input("✨ 輸入 幾個 buff (三個則填3)...\n"))
-    # run_times = int(input("✨ 輸入 隨機選擇左鍵或右鍵 要執行幾次...\n"))
-    # space_1 = int(input("✨ 輸入 空白鍵開始時間...\n"))
-    # space_2 = int(input("✨ 輸入 空白鍵結束時間...\n"))
-    controller.start()
+    controller.start(set_config)

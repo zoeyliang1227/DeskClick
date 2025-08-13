@@ -1,7 +1,10 @@
+auto_mosters.py
 button.py
 climbs_rope.py
+get_img.py
 key_codes.py
 listener.py
+mauto.py
 monsters_attacks.py
 presses_spacebar.py
 rune.py

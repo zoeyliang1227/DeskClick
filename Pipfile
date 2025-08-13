@@ -7,10 +7,11 @@ name = "pypi"
 threaded = "*"
 pyinstaller = "*"
 pyautogui = "*"
+pyyaml = "*"
+numpy = "*"
+keyboard = "*"
 opencv-python = "*"
 pillow = "*"
-keyboard = "*"
-pyyaml = "*"
 
 [dev-packages]
 
