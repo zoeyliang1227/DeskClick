@@ -11,13 +11,14 @@ def periodic_keys_loop(self, buff_key, run_times, space_1, space_2, buff_time):
     cycle_count = 0
     last_buff_time = time.time()
     while self.running:
-        time_wait = random.uniform(0.7, 1.3)
+        time_wait = random.uniform(1, 2)
         wait_time = random.randint(space_1, space_2)
         while self.paused:
             pause_state(self)
 
         cycle_count += 1
         print(f"[週期 {cycle_count}] 等待 {wait_time} 秒...")
+        # print(f"週期拿到運行時間：{self.runtime_str}，目前時間{last_buff_time}")
         # 分段等待，這樣可以及時響應停止信號
         for i in range(wait_time):
             time.sleep(time_wait)
@@ -32,7 +33,7 @@ def periodic_keys_loop(self, buff_key, run_times, space_1, space_2, buff_time):
         print(f"[週期 {cycle_count}] 開始按鍵序列...")
         # 隨機選擇左鍵或右鍵
         direction = random.choice(['left', 'right'])
-        presses = random.randint(1, run_times)
+        presses = random.randint(0, run_times)
         print(f"隨機選擇: {direction}鍵，按 {presses} 次")
         for i in range(presses): 
             success = send_combo_keys(self, direction, 'c')
@@ -48,13 +49,16 @@ def periodic_keys_loop(self, buff_key, run_times, space_1, space_2, buff_time):
             print("  跳過 z 鍵")
         time.sleep(time_wait)
         # 在 while self.running 裡替換 buff 部分
+        print(time.time(), last_buff_time, (time.time() - last_buff_time))
         if time.time() - last_buff_time >= buff_time:  # 間隔 >= buff_time 秒
+            time.sleep(time_wait)
             for k in range(1, buff_key + 1):
                 result4 = send_key(self, str(k))
                 print(f"  {k} -> {'✓' if result4 else '✗'}")
                 time.sleep(time_wait)
 
             last_buff_time = time.time()  # 更新上次 buff 時間
+            print(last_buff_time)
 
         else:
             remaining = int(time.time() - last_buff_time)

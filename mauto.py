@@ -15,6 +15,7 @@ pause = 'F2'
 
 class WinKeyController():
     def __init__(self, config_path='config.yml'):
+        self.runtime_str = ''
         self.config = self.load_config(config_path)
         self.user32 = ctypes.windll.user32
         self.kernel32 = ctypes.windll.kernel32
@@ -46,7 +47,7 @@ class WinKeyController():
     def stop(self):
         stop(self)
 
-    def start(self, set_config):
+    def start(self):
         """開始執行"""
         self.space_running = True
         self.running = True
@@ -56,6 +57,7 @@ class WinKeyController():
         space_1 = int(self.config.get('space_1'))
         space_2 = int(self.config.get('space_2'))
         buff_time = int(self.config.get('buff_time'))
+        
 
         print(f"📌 按鍵: {buff_key} / 次數: {run_times} / 延遲: {space_1}-{space_2}秒 / buff時間: {buff_time} 秒")
         print("="*50)
@@ -65,7 +67,7 @@ class WinKeyController():
         
         for i in range(5, 0, -1):
             print(f"倒數 {i} 秒...")
-            time.sleep(1)
+            time.sleep(2)
         
         print("✅ 開始執行！")
         
@@ -77,6 +79,7 @@ class WinKeyController():
             time.sleep(random.uniform(0.7, 1.3))
         
         print(f"初始 {buff_key} 個 buff 結果: {success}")
+
         self.space_thread = threading.Thread(target=self.hold_space_loop, daemon=True)
         periodic_thread = threading.Thread(target=lambda: self.periodic_keys_loop(buff_key, run_times, space_1, space_2, buff_time), daemon=True, name="PeriodicThread")
         
@@ -104,7 +107,7 @@ class WinKeyController():
                 hours = int(elapsed // 3600)
                 minutes = int((elapsed % 3600) // 60)
                 seconds = int(elapsed % 60)
-                
+
                 # 顯示狀態
                 if self.paused:
                     status = f"⏸️  暫停中 | 運行時間: {hours:02d}:{minutes:02d}:{seconds:02d}"
@@ -113,7 +116,7 @@ class WinKeyController():
                 else:
                     status = f"運行時間: {hours:02d}:{minutes:02d}:{seconds:02d}"
                     status += f" | 空白鍵: {'🟢' if self.space_thread else '🔴'}"
-                    # status += f" | 尋怪: {'🟢' if self.monster_hunting else '🔴'}"
+                    status += f" | 尋怪: {'🟢' if periodic_thread else '🔴'}"
                     status += f" | 狀態: {'▶️運行中' if not self.paused else '⏸️暫停'}"
                     print(f"📊 {status}")
                 
@@ -127,4 +130,4 @@ if __name__ == '__main__':
     print(f"⚠️  注意：如果 {pause} 鍵無法使用，程式會自動切換到控制台輸入模式")
 
     controller = WinKeyController()
-    controller.start(set_config)
+    controller.start()
